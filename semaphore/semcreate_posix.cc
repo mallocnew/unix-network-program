@@ -29,6 +29,15 @@ int main(int argc, char** argv) {
   if (optind != argc - 1)
     printf("usage: semcreate [-e] [-i initalvalue] <name>");
   sem_t* sem = sem_open(argv[optind], flags, FILE_MODE, value);
+  if (sem == SEM_FAILED) {
+    perror("sem_open error");
+    return -1;
+  }
+  int val;
+  if (sem_getvalue(sem, &val) == 0)
+    printf("value = %d\n", val);
+  else
+    printf("getvalue error\n");
   sem_close(sem);
   return 0;
 }
