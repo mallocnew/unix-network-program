@@ -21,9 +21,10 @@ int main(int argc, char** argv) {
   if (pid == 0) {
     close(pipe_fds[1]);
     char buf[128];
-    read(pipe_fds[0], buf, sizeof(buf) - 1);
-    std::cout << "read " << strlen(buf) << " from pipe\n";
-    std::cout << "sub process read:" << std::string(buf, strlen(buf)) << "\n";
+    int n = read(pipe_fds[0], buf, sizeof(buf) - 1);
+    std::cout << "read " << n << " from pipe\n";
+    std::string msg(buf, n);
+    fprintf(stdout, "sub process read[%lu]:%s\n", msg.size(), msg.c_str());
     close(pipe_fds[0]);
   } else {
     close(pipe_fds[0]);
